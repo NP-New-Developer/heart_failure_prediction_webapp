@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Heart Failure Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #edf2f8;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        background: url('{{ url_for('static', filename='images.jpg') }}') no-repeat;
+        background-size: cover;
+        background-position: center;
+      }
+      .container {
+        max-width: 700px;
+        margin-top: 50px;
+        background-color: #f1a4a4;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: black;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 30px;
+      }
+      .form-label {
+        font-weight: bold;
+        color: #495057;
+      }
+      .form-control,
+      .form-select {
+        border-radius: 8px;
+        padding: 12px;
+      }
+      .form-control:focus,
+      .form-select:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+      }
+      .btn-primary {
+        padding: 10px 0;
+        font-size: 1.2rem;
+        background-color: #007bff;
+        border: none;
+        border-radius: 8px;
+      }
+      .btn-primary:hover {
+        background-color: #0056b3;
+      }
+      .btn-secondary {
+        padding: 10px 0;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 8px;
+      }
+      .alert-success {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container mt-5">
+      <h1 class="text-center mb-3">Heart Failure Prediction</h1>
+
+      {% if result %}
+      <div class="alert alert-success text-center" role="alert">
+        {{ result }}
+      </div>
+
+      <div class="d-grid gap-2 mb-4">
+        <button type="button" onclick="window.location.href='/'" class="btn btn-secondary btn-block">Clear prediction Result</button>
+      </div>
+      {% endif %}
+
+      <form method="post" action="/predict" class="bg-light p-4 rounded shadow-sm">
+        <div class="mb-3">
+          <label for="age" class="form-label">Enter your Age (years)</label>
+          <input type="number" class="form-control" id="age" name="age" placeholder="Enter age" required />
+        </div>
+
+        <div class="mb-3">
+          <label for="anaemia" class="form-label">Enter Anaemia status</label>
+          <select class="form-select" id="anaemia" name="anaemia" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="creatinine_phosphokinase" class="form-label">Enter the Creatinine Phosphokinase (CPK) level</label>
+          <input type="number" class="form-control" id="creatinine_phosphokinase" name="creatinine_phosphokinase" placeholder="Enter CPK value" required />
+        </div>
+
+        <div class="mb-3">
+          <label for="diabetes" class="form-label">Are you a Diabete patient?</label>
+          <select class="form-select" id="diabetes" name="diabetes" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="ejection_fraction" class="form-label">Ejection Fraction (%)</label>
+          <input type="number" class="form-control" id="ejection_fraction" name="ejection_fraction" placeholder="Enter ejection fraction" required />
+        </div>
+
+        <div class="mb-3">
+          <label for="high_blood_pressure" class="form-label">Are you have High Blood Pressure?</label>
+          <select class="form-select" id="high_blood_pressure" name="high_blood_pressure" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="platelets" class="form-label">Enter Platelets (kiloplatelets/mL) amount</label>
+          <input type="number" step="any" class="form-control" id="platelets" name="platelets" placeholder="Enter platelets count" required />
+        </div>
+
+        <div class="mb-3">
+          <label for="serum_creatinine" class="form-label">Enter Serum Creatinine (mg/dL) amount</label>
+          <input type="number" step="any" class="form-control" id="serum_creatinine" name="serum_creatinine" placeholder="Enter serum creatinine" required />
+        </div>
+
+        <div class="mb-3">
+          <label for="serum_sodium" class="form-label">Enter Serum Sodium (mEq/L) amount</label>
+          <input type="number" class="form-control" id="serum_sodium" name="serum_sodium" placeholder="Enter serum sodium" required />
+        </div>
+
+        <div class="mb-3">
+          <label for="sex" class="form-label">Enter your Gender</label>
+          <select class="form-select" id="sex" name="sex" required>
+            <option value="1">Male</option>
+            <option value="0">Female</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="smoking" class="form-label">Are you Smoking?</label>
+          <select class="form-select" id="smoking" name="smoking" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="time" class="form-label">Enter Follow-up time</label>
+          <input type="number" class="form-control" id="time" name="time" placeholder="Enter follow-up time" required />
+        </div>
+
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary btn-block">Predict</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
