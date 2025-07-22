@@ -1,0 +1,5 @@
+open new terminal and then code like below.
+1. python -m venv venv
+2. venv/Scripts/activate
+3. pip install numpy pandas pillow scikit-learn flask
+4. python app.py
